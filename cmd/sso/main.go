@@ -4,6 +4,7 @@ import (
     "github.com/Workbest123/auth/internal/config"
       "log/slog"
       "os"
+      "github.com/Workbest123/auth/internal/app"
 )
 
 const (
@@ -15,6 +16,9 @@ const (
 func main(){
     cfg := config.MustLoad("./config/local.yaml")
     log := setupLogger(cfg.Env)
+    log.Info("starting application", slog.Any("config",cfg))
+    application:=app.New(log,cfg.GRPC.Port, cfg.StoragePath, cfg.TokenTTL)
+    application.GRPCSrv.Mustrun()
 }
 
 
